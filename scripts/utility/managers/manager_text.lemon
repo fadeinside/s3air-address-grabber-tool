@@ -1,0 +1,437 @@
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - //
+// Text with limit (No align)
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - //
+
+// Simplified AddressGrabber.TextManager.drawTextWithLimit() function without configurable tint color.
+function void AddressGrabber.TextManager.drawTextWithLimit(s16 px, s16 py, string text, u8 font, u8 format, s8 spacing, s32 limit, u16 renderQueue)
+{
+	AddressGrabber.TextManager.drawTextWithLimit(px, py, text, font, format, spacing, 0xffffffff, limit, renderQueue)
+}
+
+// The full text rendering code
+function void AddressGrabber.TextManager.drawTextWithLimit(s16 px, s16 py, string text, u8 font, u8 format, s8 spacing, u32 tintColor, s32 limit, u16 renderQueue)
+{
+	s32 textWidth
+	
+	for (s32 A = 0x00; A < strlen(text); ++A)
+	{
+		string character = getStringFromHash(substring(text, A, 0x01))
+		
+		if (character == " " && (textWidth + px) >= limit - 0x16)
+			character = "\n"
+		
+		character = AddressGrabber.TextManager.getFormated(character, font, format)
+		
+		if (character == "\n")
+		{
+			textWidth = 0x00
+			py += AddressGrabber.TextManager.getTextWidth("   ", font, format, 0x00)
+		}
+		
+		if (character != "\n")
+		{
+			AddressGrabber.TextManager.renderCharacter(px, py, character, font, tintColor, renderQueue, textWidth)
+			textWidth += AddressGrabber.TextManager.getCharacterWidth(character, font) + spacing
+		}
+	}
+}
+
+function s16 AddressGrabber.TextManager.drawTextWithLimit_getBreaks(s16 px, string text, u8 font, s8 spacing, s32 limit)
+{
+	s32 textWidth
+	s16 lineBreaks
+	
+	for (s32 A = 0x00; A < strlen(text); ++A)
+	{
+		string character = getStringFromHash(substring(text, A, 0x01))
+		
+		if (character == " " && (textWidth + px) >= limit - 0x16)
+		{
+			character = "\n"
+			lineBreaks += 0x01
+		}
+		
+		if (character == "\n")
+			textWidth = 0x00
+		
+		if (character != "\n")
+			textWidth += AddressGrabber.TextManager.getCharacterWidth(character, font) + spacing
+	}
+	
+	return lineBreaks
+}
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - //
+// Text with alignment and outline
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - //
+
+// Simplified AddressGrabber.TextManager.drawTextWithOutline() function without configurable tint color.
+function void AddressGrabber.TextManager.drawTextWithOutline(s16 px, s16 py, string text, u8 font, u8 format, u8 alignment, s8 spacing, u16 renderQueue)
+{
+	AddressGrabber.TextManager.drawTextWithOutline(px, py, text, font, format, alignment, spacing, 0xffffffff, 0x000000ff, renderQueue)
+}
+
+// The full text rendering code
+function void AddressGrabber.TextManager.drawTextWithOutline(s16 px, s16 py, string text, u8 font, u8 format, u8 alignment, s8 spacing, u32 tintColor, u32 outlineColor, u16 renderQueue)
+{
+	s32 tempValue0 = AddressGrabber.TextManager.getTextWidth(text, font, format, spacing)
+	s32 align = (alignment == ALIGN_RIGHT) ? tempValue0 : ((alignment == ALIGN_CENTER) ? tempValue0 / 0x02 : 0x00)
+	
+	px -= align
+	
+	s32 textWidth
+	for (s32 A = 0x00; A < strlen(text); ++A)
+	{
+		string character = getStringFromHash(substring(text, A, 0x01))
+		
+		if (character == "\n")
+		{
+			textWidth = 0x00
+			py += AddressGrabber.TextManager.getTextWidth("   ", font, format, 0x00)
+		}
+		
+		character = AddressGrabber.TextManager.getFormated(character, font, format)
+		
+		if (character != "\n")
+		{
+			AddressGrabber.TextManager.renderCharacter(px, py, character, font, tintColor, renderQueue, textWidth)
+			
+			if (true)	// Corners outline
+			{
+				AddressGrabber.TextManager.renderCharacter(px - 0x01, py - 0x01, character, font, outlineColor, renderQueue, textWidth)
+				AddressGrabber.TextManager.renderCharacter(px + 0x01, py - 0x01, character, font, outlineColor, renderQueue, textWidth)
+				
+				AddressGrabber.TextManager.renderCharacter(px - 0x01, py + 0x01, character, font, outlineColor, renderQueue, textWidth)
+				AddressGrabber.TextManager.renderCharacter(px + 0x01, py + 0x01, character, font, outlineColor, renderQueue, textWidth)
+			}
+			
+			AddressGrabber.TextManager.renderCharacter(px - 0x01, py, character, font,outlineColor, renderQueue, textWidth)
+			AddressGrabber.TextManager.renderCharacter(px + 0x01, py, character, font, outlineColor, renderQueue, textWidth)
+			
+			AddressGrabber.TextManager.renderCharacter(px, py - 0x01, character, font, outlineColor, renderQueue, textWidth)
+			AddressGrabber.TextManager.renderCharacter(px, py + 0x01, character, font, outlineColor, renderQueue, textWidth)
+			
+			textWidth += AddressGrabber.TextManager.getCharacterWidth(character, font) + spacing
+		}
+	}
+}
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - //
+// Text with alignment and shadow
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - //
+
+// Simplified AddressGrabber.TextManager.drawTextWithShadow() function without configurable tint color.
+function void AddressGrabber.TextManager.drawTextWithShadow(s16 px, s16 py, string text, u8 font, u8 format, u8 alignment, s8 spacing, u16 renderQueue)
+{
+	AddressGrabber.TextManager.drawTextWithShadow(px, py, text, font, format, alignment, spacing, 0xffffffff, 0x000000ff, renderQueue)
+}
+
+// The full text rendering code
+function void AddressGrabber.TextManager.drawTextWithShadow(s16 px, s16 py, string text, u8 font, u8 format, u8 alignment, s8 spacing, u32 tintColor, u32 shadowColor, u16 renderQueue)
+{
+	s32 textWidth = AddressGrabber.TextManager.getTextWidth(text, font, format, spacing)
+	s32 align = (alignment == ALIGN_RIGHT) ? textWidth : ((alignment == ALIGN_CENTER) ? textWidth / 0x02 : 0x00)
+	
+	px -= align
+	AddressGrabber.TextManager.basic(px, py, text, font, format, spacing, tintColor, renderQueue)
+	
+	AddressGrabber.TextManager.basic(px + 0x01, py + 0x01, text, font, format, spacing, shadowColor, renderQueue)
+}
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - //
+// Text with alignment and tint background
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - //
+
+// Simplified AddressGrabber.TextManager.drawTextWithBG() function without configurable tint color.
+function void AddressGrabber.TextManager.drawTextWithBG(s16 px, s16 py, string text, u8 font, u8 format, u8 alignment, s8 spacing, u16 renderQueue)
+{
+	AddressGrabber.TextManager.drawTextWithBG(px, py, text, font, format, alignment, spacing, 0xffffffff, renderQueue)
+}
+
+// The full text rendering code
+function void AddressGrabber.TextManager.drawTextWithBG(s16 px, s16 py, string text, u8 font, u8 format, u8 alignment, s8 spacing, u32 tintColor, u16 renderQueue)
+{
+	s32 textWidth = AddressGrabber.TextManager.getTextWidth(text, font, format, spacing)
+	s32 align = (alignment == ALIGN_RIGHT) ? textWidth : ((alignment == ALIGN_CENTER) ? textWidth / 0x02 : 0x00)
+	
+	AddressGrabber.TextManager.basic(px - align, py, text, font, format, spacing, tintColor, renderQueue)
+	Renderer.drawCustomSprite(stringformat("smallfont.bg_x%d", textWidth + 0x01), (px - align) - 0x01, py - 0x01, 0x00, SPRITE_FLAG_PRIO, renderQueue, 0x00, 0xa0)
+}
+
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - //
+// Text with alignment
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - //
+
+// Simplified AddressGrabber.TextManager.drawText() function without configurable tint color.
+function void AddressGrabber.TextManager.drawText(s16 px, s16 py, string text, u8 font, u8 format, u8 alignment, s8 spacing, u16 renderQueue)
+{
+	AddressGrabber.TextManager.drawText(px, py, text, font, format, alignment, spacing, 0xffffffff, renderQueue)
+}
+
+// The full text rendering code
+function void AddressGrabber.TextManager.drawText(s16 px, s16 py, string text, u8 font, u8 format, u8 alignment, s8 spacing, u32 tintColor, u16 renderQueue)
+{
+	s32 textWidth = AddressGrabber.TextManager.getTextWidth(text, font, format, spacing)
+	s32 align = (alignment == ALIGN_RIGHT) ? textWidth : ((alignment == ALIGN_CENTER) ? textWidth / 0x02 : 0x00)
+	
+	AddressGrabber.TextManager.basic(px - align, py, text, font, format, spacing, tintColor, renderQueue)
+}
+
+// - - - - - - - - - - - - - - - - - - - //
+// Basic manager code
+// - - - - - - - - - - - - - - - - - - - //
+
+// The basic code for rendering text.
+function void AddressGrabber.TextManager.basic(s16 px, s16 py, string text, u8 font, u8 format, s8 spacing, u32 tintColor, u16 renderQueue)
+{
+	s32 textWidth
+	
+	for (s32 A = 0x00; A < strlen(text); ++A)
+	{
+		string character = getStringFromHash(substring(text, A, 0x01))
+		
+		if (character == "\n")
+		{
+			textWidth = 0x00
+			py += AddressGrabber.TextManager.getTextWidth("   ", font, format, 0x00)
+		}
+		
+		character = AddressGrabber.TextManager.getFormated(character, font, format)
+		
+		if (character != "\n")
+		{
+			AddressGrabber.TextManager.renderCharacter(px, py, character, font, tintColor, renderQueue, textWidth)
+			textWidth += AddressGrabber.TextManager.getCharacterWidth(character, font) + spacing
+		}
+	}
+}
+
+// Single character rendering function. Some optimizations are also used here to fasted rendering.
+function void AddressGrabber.TextManager.renderCharacter(s16 px, s16 py, string character, u8 font, u32 tintColor, u16 renderQueue, s32 textWidth)
+{
+	if ((px + textWidth) >= getScreenWidth() || (px + textWidth) <= -0x12)
+		return
+	if (py >= getScreenHeight() || py <= 0x00)
+		return
+	
+	string key = AddressGrabber.TextManager.getFont(font) + "." + character
+	
+	if (Renderer.hasCustomSprite(key))
+		Renderer.drawCustomSpriteTinted(key, px + textWidth, py, 0x00, SPRITE_FLAG_PRIO, renderQueue, 0x00, tintColor, 0x10000)
+}
+
+// Returns the total width of the entire text.
+function s32 AddressGrabber.TextManager.getTextWidth(string text, u8 font, u8 format, u8 spacing)
+{
+	s32 textWidth
+	
+	for (s32 A = 0x00; A < strlen(text); ++A)
+	{
+		string character = getStringFromHash(substring(text, A, 0x01))
+		
+		if (character == "\n")
+			 textWidth = 0x00
+		
+		character = AddressGrabber.TextManager.getFormated(character, font, format)
+		string key = AddressGrabber.TextManager.getFont(font) + "." + character
+		
+		textWidth += AddressGrabber.TextManager.getCharacterWidth(character, font) + spacing
+	}
+	
+	// Return the value
+	return textWidth
+}
+
+// Returns the font name.
+function string AddressGrabber.TextManager.getFont(u8 font)
+{
+	if (font == FONT_OXYTINY)
+		return "oxyfont_tiny"
+	if (font == FONT_OXYSMALL)
+		return "oxyfont_small"
+	if (font == FONT_SMALLFONT)
+		return "smallfont"
+	
+	// Failsave value
+	return ""
+}
+
+// Replaces characters for the specified formatting.
+function string AddressGrabber.TextManager.getFormated(string character, u8 font, u8 format)
+{
+	// Formating:
+	// - 0x00 - None
+	// - 0x10 - Upper case
+	// - 0x15 - Lower case
+	
+	string key = AddressGrabber.TextManager.getFont(font) + "." + character
+	
+	if (format == FORMAT_UPPERCASE || !Renderer.hasCustomSprite(key))
+	{
+		if (character == "a")
+			return "A"
+		else if (character == "b")
+			return "B"
+		else if (character == "c")
+			return "C"
+		else if (character == "d")
+			return "D"
+		else if (character == "e")
+			return "E"
+		else if (character == "f")
+			return "F"
+		else if (character == "g")
+			return "G"
+		else if (character == "h")
+			return "H"
+		else if (character == "i")
+			return "I"
+		else if (character == "j")
+			return "J"
+		else if (character == "k")
+			return "K"
+		else if (character == "l")
+			return "L"
+		else if (character == "m")
+			return "M"
+		else if (character == "n")
+			return "N"
+		else if (character == "o")
+			return "O"
+		else if (character == "p")
+			return "P"
+		else if (character == "q")
+			return "Q"
+		else if (character == "r")
+			return "R"
+		else if (character == "s")
+			return "S"
+		else if (character == "t")
+			return "T"
+		else if (character == "u")
+			return "U"
+		else if (character == "v")
+			return "V"
+		else if (character == "w")
+			return "W"
+		else if (character == "x")
+			return "X"
+		else if (character == "y")
+			return "Y"
+		else if (character == "z")
+			return "Z"
+	}
+	else if (format == FORMAT_LOWERCASE)
+	{
+		if (character == "A")
+			return "a"
+		else if (character == "B")
+			return "b"
+		else if (character == "C")
+			return "c"
+		else if (character == "D")
+			return "d"
+		else if (character == "E")
+			return "e"
+		else if (character == "F")
+			return "f"
+		else if (character == "G")
+			return "g"
+		else if (character == "H")
+			return "h"
+		else if (character == "I")
+			return "i"
+		else if (character == "J")
+			return "j"
+		else if (character == "K")
+			return "k"
+		else if (character == "L")
+			return "l"
+		else if (character == "M")
+			return "m"
+		else if (character == "N")
+			return "n"
+		else if (character == "O")
+			return "o"
+		else if (character == "P")
+			return "p"
+		else if (character == "Q")
+			return "q"
+		else if (character == "R")
+			return "r"
+		else if (character == "S")
+			return "s"
+		else if (character == "T")
+			return "t"
+		else if (character == "U")
+			return "u"
+		else if (character == "V")
+			return "v"
+		else if (character == "W")
+			return "w"
+		else if (character == "X")
+			return "x"
+		else if (character == "Y")
+			return "y"
+		else if (character == "Z")
+			return "z"
+	}
+	
+	return character
+}
+
+// Returns the width of the character of the specified parameters.
+function u8 AddressGrabber.TextManager.getCharacterWidth(string char, u8 font)
+{
+	if (font == FONT_OXYTINY)
+	{
+		if (char == "!" || char == "'" || char == "." || char == ":" || char == "|" || char == "I" || char == "i" || char == "l")
+			return 0x01
+		else if (char == "(" || char == ")" || char == "," || char == ";" || char == "[" || char == "]" || char == "`" || char == "1")
+			return 0x02
+		else if (char == " " || char == "\"" || char == "$" || char == "*" || char == "+" || char == "-" || char == "<" || char == "=" || char == ">" || char == "^" || char == "{" || char == "}" || char == "j" || char == "t")
+			return 0x03
+		else if (char == "#" || char == "@" || char == "M" || char == "O" || char == "Q" || char == "T" || char == "V" || char == "W" || char == "X" || char == "Y" || char == "U" || char == "m" || char == "v" || char == "w" || char == "x")
+			return 0x05
+		else
+			return 0x04
+	}
+	
+	if (font == FONT_OXYSMALL)
+	{
+		if (char == "'")
+			return 0x01
+		else if (char == "!" || char == "." || char == ":" || char == "|" || char == "I" || char == "i" || char == "l")
+			return 0x02
+		else if (char == "\"" || char == "(" || char == ")" || char == "," || char == "-" || char == ";" || char == "[" || char == "]" || char == "`" || char == "1")
+			return 0x03
+		else if (char == " " || char == "+" || char == "<" || char == "=" || char == ">" || char == "?" || char == "_" || char == "{" || char == "}" || char == "j" || char == "t")
+			return 0x04
+		else if (char == "~" || char == "O" || char == "Q" || char == "T" || char == "Y")
+			return 0x06
+		if (char == "@" || char == "M" || char == "V" || char == "W" || char == "m" || char == "w")
+			return 0x07
+		else
+			return 0x05
+	}
+	
+	if (font == FONT_SMALLFONT)
+	{
+		if (char == "." || char == "I" || char == ":")
+			return 0x01
+		else if (char == " " || char == "(" || char == ")")
+			return 0x02
+		else if (char == "M" || char == "W")
+			return 0x05
+		else if (char == "/" || char == "%")
+			return 0x07
+		else
+			return 0x03
+	}
+	
+	// Failsave value
+	return 0x00
+}
+
+// - Text Manager v3.1

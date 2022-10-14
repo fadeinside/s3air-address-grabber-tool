@@ -1,0 +1,29 @@
+{
+	"Metadata":
+	{
+		"Name": "Address Grabber Tool",
+		"Author": "FadeInside, Dynamic_Lemons" ,
+		"Description": "Tool for modders to get addresses and indexes of dynamic game objects.",
+		"URL": "https://github.com/fadeinside/s3air-address-grabber-tool/",
+		"ModVersion": "v1.0 (Release 2022.10.15)",
+		"GameVersion": "v22.05.15.0"
+	},
+	"Settings":
+	{
+		"List":
+		[
+			{
+				"Category": "Config",
+				"InternalName": "SETTING_GRABBER_DISPLAYING",
+				"DisplayName": "Displaying Mode:",
+				"Variable": "SETTING_GRABBER_DISPLAYING",
+				"DefaultValue": "0",
+				"Options":
+				{
+					"0": "Always on (Default)",
+					"1": "Only with Debug"
+				}
+			}
+		]
+	}
+}

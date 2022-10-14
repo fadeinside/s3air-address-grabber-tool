@@ -1,0 +1,12 @@
+SPECIAL THANKS
+
+ -> Thanks to Dynamic_Lemons for the original "Renderhook ID Grabber" mod.
+ 
+ 
+ LINKS
+
+ -> Gamebanana mod-page:
+	https://gamebanana.com
+
+ -> GitHub repository:
+	https://github.com/fadeinside/s3air-address-grabber-tool

@@ -1,0 +1,28 @@
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - //
+// Text manager
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - //
+
+// Fonts
+constant u8 FONT_OXYTINY					= 0x01
+constant u8 FONT_OXYSMALL					= 0x02
+constant u8 FONT_SMALLFONT					= 0x04
+
+// Text formating
+constant u8 FORMAT_NONE						= 0x01
+constant u8 FORMAT_UPPERCASE				= 0x02
+constant u8 FORMAT_LOWERCASE				= 0x04
+
+// Text alignment
+constant u8 ALIGN_LEFT						= 0x01
+constant u8 ALIGN_CENTER					= 0x02
+constant u8 ALIGN_RIGHT						= 0x04
+
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - //
+// Grabber mode
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - //
+
+// Modes
+constant u8 GRABBER_RENDERHOOK					= 0x00
+constant u8 GRABBER_VDPSPRITES					= 0x01
+constant u8 GRABBER_COMPOUNDS					= 0x02

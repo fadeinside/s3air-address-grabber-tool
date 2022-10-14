@@ -1,0 +1,15 @@
+// Returns true when addresses and indexes are displayed.
+function bool AddressGrabber.checkForDisplaying()
+{
+	if (SETTING_GRABBER_DISPLAYING == 0x00)
+		return true
+	
+	if (SETTING_GRABBER_DISPLAYING == 0x01)
+	{
+		// Debug mode active
+		if (Game.getSetting(SETTING_DEBUG_MODE))
+			return true
+	}
+	
+	return false
+}

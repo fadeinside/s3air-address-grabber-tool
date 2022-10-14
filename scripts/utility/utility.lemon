@@ -1,0 +1,31 @@
+//@ Function taken from sonic3air_dev/scripts/standalone/standalone.lemon
+function void waitForNextFrame()
+{
+	if (!AddressGrabber.checkForDisplaying())
+	{
+		// Call the base function
+		base.waitForNextFrame()
+		return
+	}
+	
+	if (Input.buttonPressed(BUTTON_Y))
+	{
+		++addressgrabber.tempValue0
+		
+		if (addressgrabber.tempValue0 > GRABBER_COMPOUNDS)
+			addressgrabber.tempValue0 = GRABBER_RENDERHOOK
+		
+		// Play "beep" sound
+		playSound(0x5b)
+	}
+	
+	s16 px = getScreenWidth() / 0x02
+	s16 py = 0x10
+	
+	constant array<string> GET_MODE = { "Renderhooks", "VDP sprites", "Compounds" }
+	
+	AddressGrabber.TextManager.drawTextWithBG(px, py, "Mode: " + GET_MODE[addressgrabber.tempValue0], FONT_SMALLFONT, FORMAT_UPPERCASE, ALIGN_CENTER, 0x01, 0xffff)
+	
+	// Call the base function
+	base.waitForNextFrame()
+}

@@ -1,0 +1,19 @@
+//# script-feature-level(2)
+
+#if STANDALONE
+
+#if GAMEAPP
+
+// Defines
+include _defines/?
+
+// Utility
+include utility/?
+include utility/managers/?
+
+// General
+include general/?
+
+#endif
+
+#endif

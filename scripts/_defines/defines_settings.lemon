@@ -1,0 +1,2 @@
+// Settings
+global u8 SETTING_GRABBER_DISPLAYING			// Sets the display mode for addresses and indexes on the screen.

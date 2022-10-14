@@ -1,0 +1,2 @@
+// Address Grabber
+global u8 addressgrabber.tempValue0			// Sets the mode for displaying addresses (0 - Renderhooks, 1 - VDP sprites, 2 - Compounds sprites).
